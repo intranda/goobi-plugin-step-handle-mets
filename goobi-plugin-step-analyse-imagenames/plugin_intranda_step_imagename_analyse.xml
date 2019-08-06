@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <!-- skip execution when data exist or overwrite/replace existing data -->
+    <skipWhenDataExists>false</skipWhenDataExists>
+
+    <!-- regular expression to get the correct pagination from the image name. The pagination is taken from first capturing group -->
+    <paginationRegex>.*_(\d+\w?[rv]\w?)\.\w+</paginationRegex>
+<!--
+r: recto
+v: verso
+Kleinbuchstabe a, b... nach r bzw. v: Angabe der Spalte
+Kleinbuchstabe unmittelbar nach der Zahl (also vor r bzw. v): Hinweis auf Fehler in der ursprünglichen Zettel (vgl. hierzu auch dem Ordner jeweils beiliegendes Word-Dokument)
+-->
+
+    <structureList>
+        <item filepart="ER" docstruct="RearCover" />
+        <item filepart="SO" docstruct="HeadSection" />
+        <item filepart="SU" docstruct="FootSection" />
+        <item filepart="SV" docstruct="FrontSection" />
+        <item filepart="VDS" docstruct="BuchspiegelVorne" />
+        <item filepart="VD" docstruct="FrontCover" />
+        <item filepart="HDS" docstruct="BuchspiegelHinten" />
+        <item filepart="HD" docstruct="BackCover" />
+        <item filepart="VS" docstruct="Endsheet" />
+        <item filepart="NS" docstruct="Postscript" />
+        <item filepart="FR" docstruct="Fragment" />
+        <item filepart="Fragm" docstruct="Fragment" />
+    </structureList>
+<!--
+ER: Einbandrücken
+
+SO: Schnitt oben
+SU: Schnitt unten
+SV: Schnitt vorne
+
+VD: Vorderdeckel
+VDS: Vorderdeckelspiegel
+HD: Hinterdeckel
+HDS: Hinterdeckelspiegel
+
+VS: Vorsatzblatt (falls mehrere vorhanden: VS1, VS2, ...)
+NS: Nachsatzblatt
+
+FR/Fragm: Fragment
+
+-->
+</config>
