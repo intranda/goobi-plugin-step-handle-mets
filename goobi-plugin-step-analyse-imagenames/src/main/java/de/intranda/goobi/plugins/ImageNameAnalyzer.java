@@ -2,6 +2,7 @@ package de.intranda.goobi.plugins;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +13,10 @@ import org.apache.commons.configuration.HierarchicalConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.lang.SystemUtils;
+import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.goobi.beans.Step;
+import org.goobi.production.enums.LogType;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginReturnValue;
 import org.goobi.production.enums.PluginType;
@@ -24,6 +27,7 @@ import de.sub.goobi.config.ConfigPlugins;
 import de.sub.goobi.helper.StorageProvider;
 import de.sub.goobi.helper.exceptions.DAOException;
 import de.sub.goobi.helper.exceptions.SwapException;
+import de.sub.goobi.persistence.managers.ProcessManager;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -144,6 +148,8 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
         DocStructType pageType = prefs.getDocStrctTypeByName("page");
         MetadataType physType = prefs.getMetadataTypeByName("physPageNumber");
         MetadataType logType = prefs.getMetadataTypeByName("logicalPageNumber");
+        Map<String, DocStruct> docstructs = new HashMap<>();
+
         for (int index = 0; index < orderedImageNameList.size(); index++) {
             String imageName = orderedImageNameList.get(index);
             try {
@@ -176,20 +182,44 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                     // compare image name against list of known abbreviations
                     boolean match = false;
                     for (String filepart : docstructMap.keySet()) {
-                        if (imageName.matches(".*_" + filepart + "\\d?\\.\\w+")) {
-                            DocStructType type = prefs.getDocStrctTypeByName(docstructMap.get(filepart));
+                        Pattern p = Pattern.compile(".*_" + filepart + "(\\d?)[rv]?\\.\\w+");
+                        Matcher m = p.matcher(imageName);
+                        if (m.matches()) {
+                            if (m.groupCount() > 0) {
 
-                            DocStruct ds = digDoc.createDocStruct(type);
-                            logical.addChild(ds);
-                            ds.addReferenceTo(dsPage, "logical_physical");
-
+                                String groupNumber = m.group(1);
+                                if (docstructs.containsKey(filepart + groupNumber)) {
+                                    DocStruct ds = docstructs.get(filepart + groupNumber);
+                                    ds.addReferenceTo(dsPage, "logical_physical");
+                                } else {
+                                    DocStructType type = prefs.getDocStrctTypeByName(docstructMap.get(filepart));
+                                    DocStruct ds = digDoc.createDocStruct(type);
+                                    logical.addChild(ds);
+                                    ds.addReferenceTo(dsPage, "logical_physical");
+                                    docstructs.put(filepart + groupNumber, ds);
+                                }
+                            } else {
+                                DocStructType type = prefs.getDocStrctTypeByName(docstructMap.get(filepart));
+                                DocStruct ds = digDoc.createDocStruct(type);
+                                logical.addChild(ds);
+                                ds.addReferenceTo(dsPage, "logical_physical");
+                            }
                             match = true;
                             break;
                         }
+
                     }
+
                     if (!match) {
-                        // no match found, use uncounted
-                        log.debug(process.getTitel() + ": no match found for image" + imageName);
+                        // no match found, use uncounted, add to process log
+                        LogEntry entry = LogEntry.build(process.getId())
+                                .withContent("no match found for image " + imageName)
+                                .withType(LogType.INFO)
+                                .withUsername("Image analyzer")
+                                .withCreationDate(new Date());
+                        ProcessManager.saveLogEntry(entry);
+                        process.getProcessLog().add(entry);
+                        log.debug(process.getTitel() + ": no match found for image " + imageName);
                     }
                 }
             } catch (TypeNotAllowedForParentException | TypeNotAllowedAsChildException | MetadataTypeNotAllowedException
