@@ -4,7 +4,7 @@
     <skipWhenDataExists>false</skipWhenDataExists>
 
     <!-- regular expression to get the correct pagination from the image name. The pagination is taken from first capturing group -->
-    <paginationRegex>.*_(\d+\w?[rv]\w?)\.\w+</paginationRegex>
+    <paginationRegex>.*_0?0?(\d+\w?[rv]\w?)\.\w+</paginationRegex>
 <!--
 r: recto
 v: verso
@@ -25,6 +25,9 @@ Kleinbuchstabe unmittelbar nach der Zahl (also vor r bzw. v): Hinweis auf Fehler
         <item filepart="NS" docstruct="Postscript" />
         <item filepart="FR" docstruct="Fragment" />
         <item filepart="Fragm" docstruct="Fragment" />
+        <item filepart="Farbkarte_Buchblock" docstruct="ColorChart" />
+        <item filepart="Farbkarte_Bucheinband" docstruct="ColorChart" />
+        <item filepart="Farbkarte" docstruct="ColorChart" />
     </structureList>
 <!--
 ER: Einbandrücken

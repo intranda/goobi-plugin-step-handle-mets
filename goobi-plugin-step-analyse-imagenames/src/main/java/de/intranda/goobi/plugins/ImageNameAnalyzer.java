@@ -149,6 +149,13 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
         MetadataType physType = prefs.getMetadataTypeByName("physPageNumber");
         MetadataType logType = prefs.getMetadataTypeByName("logicalPageNumber");
         Map<String, DocStruct> docstructs = new HashMap<>();
+        DocStruct text = null;
+        try {
+            text = digDoc.createDocStruct(prefs.getDocStrctTypeByName("Textblock"));
+        } catch (TypeNotAllowedForParentException e1) {
+            log.error(e1);
+            return PluginReturnValue.ERROR;
+        }
 
         for (int index = 0; index < orderedImageNameList.size(); index++) {
             String imageName = orderedImageNameList.get(index);
@@ -172,11 +179,15 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                 dsPage.addMetadata(mdLogicalPageNo);
                 logical.addReferenceTo(dsPage, "logical_physical");
 
+
+
                 // compare image name against regular expression
                 Matcher matcher = imagePattern.matcher(imageName);
                 if (matcher.matches()) {
                     String pagination = matcher.group(1);
                     mdLogicalPageNo.setValue(pagination);
+                    text.addReferenceTo(dsPage, "logical_physical");
+
                 } else {
                     mdLogicalPageNo.setValue("uncounted");
                     // compare image name against list of known abbreviations
@@ -194,15 +205,16 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                                 } else {
                                     DocStructType type = prefs.getDocStrctTypeByName(docstructMap.get(filepart));
                                     DocStruct ds = digDoc.createDocStruct(type);
-                                    logical.addChild(ds);
+                                    //                                    logical.addChild(ds);
                                     ds.addReferenceTo(dsPage, "logical_physical");
                                     docstructs.put(filepart + groupNumber, ds);
                                 }
                             } else {
                                 DocStructType type = prefs.getDocStrctTypeByName(docstructMap.get(filepart));
                                 DocStruct ds = digDoc.createDocStruct(type);
-                                logical.addChild(ds);
+                                //                                logical.addChild(ds);
                                 ds.addReferenceTo(dsPage, "logical_physical");
+                                docstructs.put(filepart, ds);
                             }
                             match = true;
                             break;
@@ -222,11 +234,102 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                         log.debug(process.getTitel() + ": no match found for image " + imageName);
                     }
                 }
+
+
             } catch (TypeNotAllowedForParentException | TypeNotAllowedAsChildException | MetadataTypeNotAllowedException
                     | DocStructHasNoTypeException e) {
                 log.error(e);
                 return PluginReturnValue.ERROR;
             }
+        }
+
+        try {
+            // order docstructs
+            if (docstructs.containsKey("VD")) {
+                logical.addChild(docstructs.get("VD"));
+
+            }
+            if (docstructs.containsKey("VDS")) {
+                logical.addChild(docstructs.get("VDS"));
+            }
+            if (docstructs.containsKey("VS")) {
+                logical.addChild(docstructs.get("VS"));
+            }
+            if (docstructs.containsKey("VS1")) {
+                logical.addChild(docstructs.get("VS1"));
+            }
+            if (docstructs.containsKey("VS2")) {
+                logical.addChild(docstructs.get("VS2"));
+            }
+            if (docstructs.containsKey("VS3")) {
+                logical.addChild(docstructs.get("VS3"));
+            }
+            if (docstructs.containsKey("VS4")) {
+                logical.addChild(docstructs.get("VS4"));
+            }
+            if (docstructs.containsKey("VS5")) {
+                logical.addChild(docstructs.get("VS5"));
+            }
+            logical.addChild(text);
+
+            if (docstructs.containsKey("NS")) {
+                logical.addChild(docstructs.get("NS"));
+            }
+            if (docstructs.containsKey("NS1")) {
+                logical.addChild(docstructs.get("NS1"));
+            }
+            if (docstructs.containsKey("NS2")) {
+                logical.addChild(docstructs.get("NS2"));
+            }
+            if (docstructs.containsKey("NS3")) {
+                logical.addChild(docstructs.get("NS3"));
+            }
+            if (docstructs.containsKey("NS4")) {
+                logical.addChild(docstructs.get("NS4"));
+            }
+            if (docstructs.containsKey("NS5")) {
+                logical.addChild(docstructs.get("NS5"));
+            }
+            if (docstructs.containsKey("HDS")) {
+                logical.addChild(docstructs.get("HDS"));
+            }
+            if (docstructs.containsKey("HD")) {
+                logical.addChild(docstructs.get("HD"));
+            }
+
+            if (docstructs.containsKey("HD")) {
+                logical.addChild(docstructs.get("HD"));
+            }
+            if (docstructs.containsKey("ER")) {
+                logical.addChild(docstructs.get("ER"));
+            }
+            if (docstructs.containsKey("SV")) {
+                logical.addChild(docstructs.get("SV"));
+            }
+            if (docstructs.containsKey("SO")) {
+                logical.addChild(docstructs.get("SO"));
+            }
+            if (docstructs.containsKey("SU")) {
+                logical.addChild(docstructs.get("SU"));
+            }
+            if (docstructs.containsKey("Farbkarte")) {
+                logical.addChild(docstructs.get("Farbkarte"));
+            }
+            if (docstructs.containsKey("Farbkarte_Buchblock")) {
+                logical.addChild(docstructs.get("Farbkarte_Buchblock"));
+            }
+            if (docstructs.containsKey("Farbkarte_Bucheinband")) {
+                logical.addChild(docstructs.get("Farbkarte_Bucheinband"));
+            }
+            if (docstructs.containsKey("FR")) {
+                logical.addChild(docstructs.get("FR"));
+            }
+            if (docstructs.containsKey("Fragm")) {
+                logical.addChild(docstructs.get("Fragm"));
+            }
+        } catch (TypeNotAllowedAsChildException e) {
+            log.error(e);
+            return PluginReturnValue.ERROR;
         }
         try {
             process.writeMetadataFile(ff);
