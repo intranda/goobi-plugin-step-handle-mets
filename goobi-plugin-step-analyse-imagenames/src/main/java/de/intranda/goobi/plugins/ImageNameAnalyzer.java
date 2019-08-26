@@ -171,15 +171,13 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                 dsPage.addContentFile(cf);
 
                 physical.addChild(dsPage);
-                Metadata mdPhysPageNo = new Metadata(physType);
-                mdPhysPageNo.setValue(String.valueOf(index + 1));
-                dsPage.addMetadata(mdPhysPageNo);
+                //                Metadata mdPhysPageNo = new Metadata(physType);
+                //                mdPhysPageNo.setValue(String.valueOf(index + 1));
+                //                dsPage.addMetadata(mdPhysPageNo);
 
                 Metadata mdLogicalPageNo = new Metadata(logType);
                 dsPage.addMetadata(mdLogicalPageNo);
-                logical.addReferenceTo(dsPage, "logical_physical");
-
-
+                //                logical.addReferenceTo(dsPage, "logical_physical");
 
                 // compare image name against regular expression
                 Matcher matcher = imagePattern.matcher(imageName);
@@ -232,9 +230,9 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                         ProcessManager.saveLogEntry(entry);
                         process.getProcessLog().add(entry);
                         log.debug(process.getTitel() + ": no match found for image " + imageName);
+                        text.addReferenceTo(dsPage, "logical_physical");
                     }
                 }
-
 
             } catch (TypeNotAllowedForParentException | TypeNotAllowedAsChildException | MetadataTypeNotAllowedException
                     | DocStructHasNoTypeException e) {
@@ -243,89 +241,112 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
             }
         }
 
+        int index = 1;
         try {
             // order docstructs
             if (docstructs.containsKey("VD")) {
-                logical.addChild(docstructs.get("VD"));
-
+                DocStruct ds = docstructs.get("VD");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("VDS")) {
-                logical.addChild(docstructs.get("VDS"));
+                DocStruct ds = docstructs.get("VDS");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("VS")) {
-                logical.addChild(docstructs.get("VS"));
+                DocStruct ds = docstructs.get("VS");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("VS1")) {
-                logical.addChild(docstructs.get("VS1"));
+                DocStruct ds = docstructs.get("VS1");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("VS2")) {
-                logical.addChild(docstructs.get("VS2"));
+                DocStruct ds = docstructs.get("VS2");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("VS3")) {
-                logical.addChild(docstructs.get("VS3"));
+                DocStruct ds = docstructs.get("VS3");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("VS4")) {
-                logical.addChild(docstructs.get("VS4"));
+                DocStruct ds = docstructs.get("VS4");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("VS5")) {
-                logical.addChild(docstructs.get("VS5"));
+                DocStruct ds = docstructs.get("VS5");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
-            logical.addChild(text);
+            index = setDocstructAndPagesToLogical(logical, physType, index, text);
 
             if (docstructs.containsKey("NS")) {
-                logical.addChild(docstructs.get("NS"));
+                DocStruct ds = docstructs.get("NS");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("NS1")) {
-                logical.addChild(docstructs.get("NS1"));
+                DocStruct ds = docstructs.get("NS1");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("NS2")) {
-                logical.addChild(docstructs.get("NS2"));
+                DocStruct ds = docstructs.get("NS2");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("NS3")) {
                 logical.addChild(docstructs.get("NS3"));
+                DocStruct ds = docstructs.get("");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("NS4")) {
-                logical.addChild(docstructs.get("NS4"));
+                DocStruct ds = docstructs.get("NS4");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("NS5")) {
-                logical.addChild(docstructs.get("NS5"));
+                DocStruct ds = docstructs.get("NS5");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("HDS")) {
-                logical.addChild(docstructs.get("HDS"));
-            }
-            if (docstructs.containsKey("HD")) {
-                logical.addChild(docstructs.get("HD"));
+                DocStruct ds = docstructs.get("HDS");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
 
             if (docstructs.containsKey("HD")) {
-                logical.addChild(docstructs.get("HD"));
+                DocStruct ds = docstructs.get("HD");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("ER")) {
-                logical.addChild(docstructs.get("ER"));
+                DocStruct ds = docstructs.get("ER");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("SV")) {
-                logical.addChild(docstructs.get("SV"));
+                DocStruct ds = docstructs.get("SV");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("SO")) {
-                logical.addChild(docstructs.get("SO"));
+                DocStruct ds = docstructs.get("SO");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("SU")) {
-                logical.addChild(docstructs.get("SU"));
+                DocStruct ds = docstructs.get("SU");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("Farbkarte")) {
-                logical.addChild(docstructs.get("Farbkarte"));
+                DocStruct ds = docstructs.get("Farbkarte");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("Farbkarte_Buchblock")) {
-                logical.addChild(docstructs.get("Farbkarte_Buchblock"));
+                DocStruct ds = docstructs.get("Farbkarte_Buchblock");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("Farbkarte_Bucheinband")) {
-                logical.addChild(docstructs.get("Farbkarte_Bucheinband"));
+                DocStruct ds = docstructs.get("Farbkarte_Bucheinband");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("FR")) {
-                logical.addChild(docstructs.get("FR"));
+                DocStruct ds = docstructs.get("FR");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
             if (docstructs.containsKey("Fragm")) {
-                logical.addChild(docstructs.get("Fragm"));
+                DocStruct ds = docstructs.get("Fragm");
+                index = setDocstructAndPagesToLogical(logical, physType, index, ds);
             }
         } catch (TypeNotAllowedAsChildException e) {
             log.error(e);
@@ -339,6 +360,26 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
         }
 
         return PluginReturnValue.FINISH;
+    }
+
+    private int setDocstructAndPagesToLogical(DocStruct logical, MetadataType physType, int index, DocStruct ds) {
+        try {
+            logical.addChild(ds);
+            List<Reference> refs = ds.getAllToReferences("logical_physical");
+            for (Reference ref : refs) {
+                DocStruct dsPage = ref.getTarget();
+                Metadata mdPhysPageNo = new Metadata(physType);
+                mdPhysPageNo.setValue(String.valueOf(index));
+                dsPage.addMetadata(mdPhysPageNo);
+                logical.addReferenceTo(dsPage, "logical_physical");
+                index = index + 1;
+            }
+        } catch (TypeNotAllowedAsChildException | MetadataTypeNotAllowedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return index;
     }
 
     @Override
