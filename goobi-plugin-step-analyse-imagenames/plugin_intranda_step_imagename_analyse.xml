@@ -2,6 +2,8 @@
 <config>
     <!-- skip execution when data exist or overwrite/replace existing data -->
     <skipWhenDataExists>false</skipWhenDataExists>
+    <!-- if set to false, the order is based on the image names. If set to true, the order is based on the docstructs -->
+    <orderImagesByDocstruct>false</orderImagesByDocstruct>
 
     <!-- regular expression to get the correct pagination from the image name. The pagination is taken from first capturing group -->
     <paginationRegex>.*_0?0?(\d+\w?[rv]\w?)\.\w+</paginationRegex>
