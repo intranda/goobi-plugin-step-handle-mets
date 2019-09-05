@@ -349,8 +349,8 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                     DocStruct ds = docstructs.get("Farbkarte_Buchblock");
                     index = setDocstructAndPagesToLogical(logical, physType, index, ds);
                 }
-                if (docstructs.containsKey("Farbkarte_Bucheinband")) {
-                    DocStruct ds = docstructs.get("Farbkarte_Bucheinband");
+                if (docstructs.containsKey("Farbkarte_Einband")) {
+                    DocStruct ds = docstructs.get("Farbkarte_Einband");
                     index = setDocstructAndPagesToLogical(logical, physType, index, ds);
                 }
                 if (docstructs.containsKey("FR")) {
