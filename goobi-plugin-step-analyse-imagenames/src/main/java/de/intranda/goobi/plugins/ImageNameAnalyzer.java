@@ -202,7 +202,7 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                         Matcher m = p.matcher(imageName);
                         if (m.matches()) {
                             if (m.groupCount() > 0) {
-
+                                mdLogicalPageNo.setValue(filepart);
                                 String groupNumber = m.group(1);
                                 if (docstructs.containsKey(filepart + groupNumber)) {
                                     DocStruct ds = docstructs.get(filepart + groupNumber);
@@ -218,6 +218,7 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                                 }
                             } else {
                                 DocStructType type = prefs.getDocStrctTypeByName(docstructMap.get(filepart));
+
                                 DocStruct ds = digDoc.createDocStruct(type);
                                 if (!orderImagesByDocstruct) {
                                     logical.addChild(ds);
@@ -349,8 +350,8 @@ public class ImageNameAnalyzer implements IStepPluginVersion2 {
                     DocStruct ds = docstructs.get("Farbkarte_Buchblock");
                     index = setDocstructAndPagesToLogical(logical, physType, index, ds);
                 }
-                if (docstructs.containsKey("Farbkarte_Einband")) {
-                    DocStruct ds = docstructs.get("Farbkarte_Einband");
+                if (docstructs.containsKey("Farbkarte_Bucheinband")) {
+                    DocStruct ds = docstructs.get("Farbkarte_Bucheinband");
                     index = setDocstructAndPagesToLogical(logical, physType, index, ds);
                 }
                 if (docstructs.containsKey("FR")) {
