@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.intranda.goobi.plugins.step</groupId>
-    <artifactId>goobi-plugin-step-imagename-analyse</artifactId>
+    <artifactId>goobi-plugin-step-handle-mets</artifactId>
     <version>1.0.0</version>
     <properties>
-        <jar.name>plugin_intranda_step-imagename-analyse</jar.name>
+        <jar.name>goobi-plugin-step-handle-mets</jar.name>
         <dest.folder>/opt/digiverso/goobi/plugins/step/</dest.folder>
     </properties>
 	<repositories>
