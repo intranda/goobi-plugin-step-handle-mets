@@ -1,0 +1,5 @@
+    <config_plugin>
+        <RepresentativeStructureElement>TitlePage</RepresentativeStructureElement>
+        <ErrorMessage>Strukturelement zum setzen des Repräsentanten konnte nicht gefunden werden.</ErrorMessage>
+        <StepName>Handle METS</StepName>
+    </config_plugin>

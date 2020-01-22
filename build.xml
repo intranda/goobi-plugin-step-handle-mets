@@ -1,8 +1,8 @@
-<project name="goobi-plugin-step-analyse-imagenames" default="devbuild">
+<project name="goobi-plugin-step-handle-mets" default="devbuild">
 	<target name="devbuild">
 		<exec executable="mvn">
 			<arg value="package"/>
 		</exec>
-		<copy file="target/plugin_intranda_step-imagename-analyse.jar" todir="/opt/digiverso/goobi/plugins/step/"/>
+		<copy file="target/plugin_intranda_step-handle-mets.jar" todir="/opt/digiverso/goobi/plugins/step/"/>
 	</target>
 </project>

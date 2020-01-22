@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class METSHandlePlugin implements IStepPlugin, IPlugin {
 
-    private static final String PLUGIN_NAME = "RepresentativeCreation";
+    private static final String PLUGIN_NAME = "HandleMETS";
 
     private static final String TITLE_PAGE_NAME = "TitlePage";
     private static final String PAGE_NO_NAME = "physPageNumber";

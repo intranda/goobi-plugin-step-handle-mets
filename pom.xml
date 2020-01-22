@@ -103,4 +103,4 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-<scm><url>scm:git:ssh://git@gitea.intranda.com:goobi-workflow/goobi-plugin-step-analyse-imagenames.git</url><connection>scm:git:ssh://git@gitea.intranda.com:goobi-workflow/goobi-plugin-step-analyse-imagenames.git</connection></scm></project>
+<scm><url>scm:git:ssh://git@gitea.intranda.com:goobi-workflow/goobi-plugin-step-handle-mets.git</url><connection>scm:git:ssh://git@gitea.intranda.com:goobi-workflow/goobi-plugin-step-handle-mets.git</connection></scm></project>
