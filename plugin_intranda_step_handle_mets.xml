@@ -1,5 +1,5 @@
     <config_plugin>
-        <RepresentativeStructureElement>TitlePage</RepresentativeStructureElement>
-        <ErrorMessage>Strukturelement zum setzen des Repräsentanten konnte nicht gefunden werden.</ErrorMessage>
+        <PEMFile>/home/joel/Handles/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
+        <ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
         <StepName>Handle METS</StepName>
     </config_plugin>

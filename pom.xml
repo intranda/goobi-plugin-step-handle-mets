@@ -102,5 +102,13 @@
             <version>1.18.4</version>
             <scope>provided</scope>
         </dependency>
+        
+        		<!-- https://mvnrepository.com/artifact/net.handle/handle-client -->
+		<dependency>
+			<groupId>net.handle</groupId>
+			<artifactId>handle-client</artifactId>
+			<version>9.2.0</version>
+		</dependency>
+		
     </dependencies>
 <scm><url>scm:git:ssh://git@gitea.intranda.com:goobi-workflow/goobi-plugin-step-handle-mets.git</url><connection>scm:git:ssh://git@gitea.intranda.com:goobi-workflow/goobi-plugin-step-handle-mets.git</connection></scm></project>
