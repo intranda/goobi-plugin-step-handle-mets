@@ -86,7 +86,8 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         try {
             plug.prefs = new Prefs();
             plug.prefs.loadPrefs(rulesetExample);
-
+            plug.urn = plug.prefs.getMetadataTypeByName("_urn");
+            
             //read the metatdata
             Fileformat fileformat = new MetsMods(plug.prefs);
             fileformat.read(xmlExample);

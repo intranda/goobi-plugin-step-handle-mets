@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 import org.apache.commons.lang.StringUtils;
@@ -42,7 +43,7 @@ public class HandleClient {
     private static String strUserHandle = "21.T11998/USER28";
     private static String strHandleBase = "21.T11998";
     private static String strURLPrefix = "https://viewer.goobi.io/idresolver?handle=";
-    private static int ADMIN_INDEX = 300;   //NOT 28!
+    private static int ADMIN_INDEX = 300; //NOT 28!
     private static int ADMIN_RECORD_INDEX = 100;
     private static int URL_RECORD_INDEX = 1;
 
@@ -50,6 +51,8 @@ public class HandleClient {
 
     private PrivateKey privKey;
     private PublicKeyAuthenticationInfo authInfo;
+
+    private String strKundenKurz = "go";
 
     //-----------------Testing:---------------------
     public static void main(String[] args) throws HandleException, IOException {
@@ -67,13 +70,12 @@ public class HandleClient {
         test.resolveRequest(strUserHandle);
 
         String strUniqueHandle = test.newURLHandle("21.T11998/TEST02", "https://stackoverflow.com/", false);
-//        test.changleHandleURL(strUniqueHandle, "https://www.theguardian.com/international");
+        //        test.changleHandleURL(strUniqueHandle, "https://www.theguardian.com/international");
         test.resolveRequest(strUniqueHandle);
-        
+
         test.resolveRequest("21.T11998/TEST02");
         test.changleHandleURL("21.T11998/TEST02", "https://www.theguardian.com/international");
         test.resolveRequest("21.T11998/TEST02");
-
 
         //        
     }
@@ -90,7 +92,7 @@ public class HandleClient {
     //Returns the new Handle.
     public String makeURLHandleForObject(String strObjectId) throws HandleException {
 
-        String strNewHandle = newURLHandle(strHandleBase + "/" + strObjectId, strURLPrefix, true);
+        String strNewHandle = newURLHandle(strHandleBase + "/goobi-" + strKundenKurz + "-" + strObjectId, strURLPrefix, true);
         String strNewURL = getURLForHandle(strNewHandle);
 
         if (changleHandleURL(strNewHandle, strNewURL)) {
@@ -111,6 +113,28 @@ public class HandleClient {
             return strNewHandle;
         }
 
+        //create a unique suffix?
+        if (boMintNewSuffix) {
+
+            int iCount = 0;
+            String strTestHandle = strNewHandle;
+
+            while (isHandleRegistered(strTestHandle)) {
+
+                strTestHandle = strNewHandle + "-" + iCount;
+                iCount++;
+
+                if (iCount > 1000) {
+                    throw new HandleException(HandleException.INTERNAL_ERROR, "Registry query always returning true: " + strNewHandle);
+                }
+            }
+
+            //test handle ok:
+            strNewHandle = strTestHandle;
+
+            //request.mintNewSuffix = true;
+        }
+
         // Define the admin record for the handle we want to create
         AdminRecord admin = createAdminRecord(strUserHandle, ADMIN_INDEX);
 
@@ -125,11 +149,6 @@ public class HandleClient {
 
         // Create the request to send and the resolver to send it
         CreateHandleRequest request = new CreateHandleRequest(Util.encodeString(strNewHandle), values, authInfo);
-
-        //create a unique suffix?
-        if (boMintNewSuffix) {
-            request.mintNewSuffix = true;
-        }
 
         HandleResolver resolver = new HandleResolver();
         AbstractResponse response;
@@ -194,14 +213,13 @@ public class HandleClient {
 
         log.info("update Handle: DOI: " + handle + " URL: " + newUrl);
 
-
         try {
             int timestamp = (int) (System.currentTimeMillis() / 1000);
             HandleValue handleNew = new HandleValue(URL_RECORD_INDEX, "URL", newUrl);
             handleNew.setTimestamp(timestamp);
 
             // Make a create-handle request.
-            HandleValue values[] = {   handleNew };
+            HandleValue values[] = { handleNew };
 
             ModifyValueRequest req = new ModifyValueRequest(Util.encodeString(handle), values, authInfo);
 
@@ -260,7 +278,7 @@ public class HandleClient {
         try {
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePrivate(spec);
-            
+
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
