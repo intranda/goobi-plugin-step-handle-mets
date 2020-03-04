@@ -183,7 +183,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
             String strHandle = getHandle(docstruct);
             if (strHandle == null) {
                 //if not, make one.
-                strHandle = handler.makeURLHandleForObject(strId);
+                strHandle = handler.makeURLHandleForObject(strId, config.getString("HandleInstitutionAbbr", "go"));
                 setHandle(docstruct, strHandle);
             }
         }

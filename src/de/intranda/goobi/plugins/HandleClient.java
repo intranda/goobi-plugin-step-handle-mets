@@ -52,8 +52,6 @@ public class HandleClient {
     private PrivateKey privKey;
     private PublicKeyAuthenticationInfo authInfo;
 
-    private String strKundenKurz = "go";
-
     //-----------------Testing:---------------------
     public static void main(String[] args) throws HandleException, IOException {
 
@@ -90,7 +88,7 @@ public class HandleClient {
 
     //Given an object with specified ID, make a handle "id_xyz" with URL given in getURLForHandle.
     //Returns the new Handle.
-    public String makeURLHandleForObject(String strObjectId) throws HandleException {
+    public String makeURLHandleForObject(String strObjectId, String strKundenKurz) throws HandleException {
 
         String strNewHandle = newURLHandle(strHandleBase + "/goobi-" + strKundenKurz + "-" + strObjectId, strURLPrefix, true);
         String strNewURL = getURLForHandle(strNewHandle);

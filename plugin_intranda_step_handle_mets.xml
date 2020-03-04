@@ -2,4 +2,5 @@
         <PEMFile>/home/joel/Handles/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
         <ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
         <StepName>Handle METS</StepName>
+        <HandleInstitutionAbbr>go</HandleInstitutionAbbr>
     </config_plugin>
