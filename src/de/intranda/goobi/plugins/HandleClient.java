@@ -102,7 +102,7 @@ public class HandleClient {
     }
 
     //Make a new handle with specified URL.
-    //If boMintNewSuffix, add a suffix guaranteeing uniquness.
+    //If boMintNewSuffix, add a suffix guar initConfig(myconfig);anteeing uniquness.
     //Retuns the new handle.
     public String newURLHandle(String strNewHandle, String url, Boolean boMintNewSuffix) throws HandleException {
 

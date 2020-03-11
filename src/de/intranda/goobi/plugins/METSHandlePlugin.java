@@ -9,7 +9,10 @@ import net.handle.hdllib.HandleException;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import org.goobi.beans.Step;
+import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
+import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
 import org.goobi.beans.Ruleset;
@@ -63,6 +66,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     private Prefs prefs;
 
     private MetadataType urn;
+    private SubnodeConfiguration config;
 
     @Override
     public PluginType getType() {
@@ -113,6 +117,38 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     @Override
     public void initialize(Step step, String returnPath) {
 
+        this.returnPath = returnPath;
+        this.step = step;
+
+        String projectName = step.getProzess().getProjekt().getTitel();
+
+        XMLConfiguration xmlConfig = ConfigPlugins.getPluginConfig(PLUGIN_NAME);
+        xmlConfig.setExpressionEngine(new XPathExpressionEngine());
+        xmlConfig.setReloadingStrategy(new FileChangedReloadingStrategy());
+
+        SubnodeConfiguration myconfig = null;
+
+        // order of configuration is:
+        // 1.) project name and step name matches
+        // 2.) step name matches and project is *
+        // 3.) project name matches and step name is *
+        // 4.) project name and step name are *
+        try {
+            myconfig = xmlConfig.configurationAt("//config[./project = '" + projectName + "'][./step = '" + step.getTitel() + "']");
+        } catch (IllegalArgumentException e) {
+            try {
+                myconfig = xmlConfig.configurationAt("//config[./project = '*'][./step = '" + step.getTitel() + "']");
+            } catch (IllegalArgumentException e1) {
+                try {
+                    myconfig = xmlConfig.configurationAt("//config[./project = '" + projectName + "'][./step = '*']");
+                } catch (IllegalArgumentException e2) {
+                    myconfig = xmlConfig.configurationAt("//config[./project = '*'][./step = '*']");
+                }
+            }
+        }
+
+       this.config = myconfig;
+        
         this.returnPath = returnPath;
         this.step = step;
         this.process = step.getProzess();
@@ -168,7 +204,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     // if not, create handle and save it under "_urn" in the docstruct.
     public void addHandle(DocStruct docstruct, String strId) throws HandleException, IOException, MetadataTypeNotAllowedException {
 
-        XMLConfiguration config = ConfigPlugins.getPluginConfig(title);
+//        XMLConfiguration config = ConfigPlugins.getPluginConfig(title);
         String strPEMFile = config.getString("PEMFile", PEM_FILE);
         HandleClient handler = new HandleClient(strPEMFile);
 
