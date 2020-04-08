@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Mapping>
+
+<!-- Mandatory fields:  -->
+ 
+	<map>
+		<doiElt>creatorName</doiElt>
+		<localElt></localElt>
+		<default>"Stadtarchiv Duderstadt"</default>
+	</map>
+
+
+	<map>
+		<doiElt>title</doiElt>
+		<localElt>titel</localElt>
+		<altLocalElt>EPN (digital)</altLocalElt>
+		<altLocalElt>EPN (digital)</altLocalElt>
+		<default>Fragment</default>
+	</map>
+	
+	
+
+<!-- Recommended fields:  -->
+
+
+
+<!-- Optional fields:  -->
+
+
+
+
+
+</Mapping>
