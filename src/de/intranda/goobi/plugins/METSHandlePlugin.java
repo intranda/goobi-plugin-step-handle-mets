@@ -1,7 +1,6 @@
 package de.intranda.goobi.plugins;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,10 +12,7 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
-import org.goobi.beans.LogEntry;
 import org.goobi.beans.Process;
-import org.goobi.beans.Ruleset;
-import org.goobi.production.enums.LogType;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
@@ -29,22 +25,10 @@ import ugh.dl.Fileformat;
 import ugh.dl.Metadata;
 import ugh.dl.MetadataType;
 import ugh.dl.Prefs;
-import ugh.dl.Reference;
 import ugh.exceptions.MetadataTypeNotAllowedException;
-import ugh.exceptions.PreferencesException;
-import ugh.exceptions.ReadException;
-import ugh.exceptions.WriteException;
 import ugh.fileformats.mets.MetsMods;
-import uk.gov.nationalarchives.droid.core.signature.FileFormat;
+//import uk.gov.nationalarchives.droid.core.signature.FileFormat;
 import de.sub.goobi.config.ConfigPlugins;
-import de.sub.goobi.helper.enums.StepEditType;
-import de.sub.goobi.helper.enums.StepStatus;
-import de.sub.goobi.helper.exceptions.DAOException;
-import de.sub.goobi.helper.exceptions.SwapException;
-import de.sub.goobi.metadaten.MetadatenHelper;
-import de.sub.goobi.persistence.managers.ProcessManager;
-import de.sub.goobi.persistence.managers.RulesetManager;
-import de.sub.goobi.persistence.managers.StepManager;
 import lombok.extern.log4j.Log4j;
 
 @PluginImplementation

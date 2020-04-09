@@ -60,7 +60,7 @@ gespeichert.
 
 Nachdem das Plugin installiert und konfiguriert wurde, kann es innerhalb eines Arbeitsschrittes von Goobi genutzt werden.
 
-Dazu muss innerhalb der gewünschten Aufgabe das Plugin `"plugin_intranda_step_handle_mets"` eingetragen werden. Des Weiteren muss die Checkbox Automatische Aufgabe gesetzt sein.
+Dazu muss innerhalb der gewünschten Aufgabe das Plugin `"plugin_intranda_step_handle_mets"` eingetragen werden. Des Weiteren muss die Checkboxes Metadaten und Automatische Aufgabe gesetzt sein.
 
 ## Arbeitsweise
 
