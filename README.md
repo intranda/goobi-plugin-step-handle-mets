@@ -1,6 +1,11 @@
 # Automatic Handles
 
-Documentation on the automatic Handle request plugin
+Documentation zur Plugin zum automatische Handlevergabe.
+
+## Beschreibung
+
+Das Plugin erzeugt beim Handle-Server ein Handle für jeder logische und physische Element eines METS-Dateis. Dieser Handle wird dann in dem Element selber gespeichert, als Metadatum `"_urn"`.
+
 
 ## Installation und Konfiguration
 
@@ -11,7 +16,7 @@ goobi-plugin-step-handle-mets.jar
 plugin_intranda_step_handle_mets.xml
 ```
 
-Die Datei ```goobi-plugin-step-handle-mets.jar``` enthält die Programmlogik und muss für den tomcat-Nutzer lesbar in folgendes Verzeichnis installiert werden:
+Die Datei `"goobi-plugin-step-handle-mets.jar"` enthält die Programmlogik und muss für den tomcat-Nutzer lesbar in folgendes Verzeichnis installiert werden:
 
 ```bash
 /opt/digiverso/goobi/plugins/step/
@@ -37,12 +42,14 @@ Die Datei dient zur Konfiguration des Plugins und muss wie folgt aufgebaut sein:
 </config_plugin>
 ```
 
-Im Element ```PEMFile``` 
-wird der Pfad zur Private Key .PEM-Datei hinterlegt. Dieser wird vom GWDG bereitgestellt"r
+Eine Kopie liegt in dieser Repro, im Ordner "resources".
+
+Im Element `"PEMFile"`
+wird der Pfad zur Private Key .PEM-Datei hinterlegt. Dieser wird vom GWDG bereitgestellt.
 
 
-Das Element ```HandleInstitutionAbbr``` 
-spezifiziert der Abkürzung, mit dem die Handles gespeichert werden sollen. Handles werden im Form 
+Das Element `"HandleInstitutionAbbr"`
+spezifiziert der Abkürzung, mit dem die Handles gespeichert werden sollen. Handles werden im Form
 
 `/goobi-KundenKurzel-objektId`
 
@@ -53,14 +60,13 @@ gespeichert.
 
 Nachdem das Plugin installiert und konfiguriert wurde, kann es innerhalb eines Arbeitsschrittes von Goobi genutzt werden.
 
-Dazu muss innerhalb der gewünschten Aufgabe das Plugin ```plugin_intranda_step_handle_mets``` eingetragen werden. Des Weiteren muss die Checkbox Automatische Aufgabe gesetzt sein.
+Dazu muss innerhalb der gewünschten Aufgabe das Plugin `"plugin_intranda_step_handle_mets"` eingetragen werden. Des Weiteren muss die Checkbox Automatische Aufgabe gesetzt sein.
 
 ## Arbeitsweise
 
 Die Arbeitsweise des Plugins innerhalb des korrekt konfigurierten Workflows sieht folgendermaßen aus:
 
-* Wenn das Plugin innerhalb des Workflows aufgerufen wurde, öffnet es die METS-Datei. 
-* Für jede logische und physische Element des METS-Dateis, wird ein Handle erzeugt (vom Form `/goobi-KundenKurzel-objektId`, wo der 
-objektId die des Elements ist, mit Suffix `-1`, `-2`, etc. sollte der Handle schon existieren. 
-* Dieser Handle wird dann in der jeweilige Element geschrieben, unter der Metadata vom Type `"_urn"`. 
-
+* Wenn das Plugin innerhalb des Workflows aufgerufen wurde, öffnet es die METS-Datei.
+* Für jede logische und physische Element des METS-Dateis, wird ein Handle erzeugt (vom Form `"/goobi-KundenKurzel-objektId"`, wo der
+objektId die des Elements ist, mit Suffix `-1`, `-2`, etc. sollte der Handle schon existieren).
+* Dieser Handle wird dann in der jeweilige Element geschrieben, unter der Metadata vom Type `"_urn"`.

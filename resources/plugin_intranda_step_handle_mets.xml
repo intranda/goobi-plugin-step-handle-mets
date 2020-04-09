@@ -4,7 +4,7 @@
 		<!-- which projects to use for (can be more then one, otherwise use *) -->
 		<project>*</project>
 		<step>*</step>
-		<StepName>Handle METS</StepName>
+		<StepName>intranda_step_handle_mets</StepName>
 		<PEMFile>/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
 		<HandleInstitutionAbbr>go</HandleInstitutionAbbr>
 		<ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>

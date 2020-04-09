@@ -52,8 +52,8 @@ import lombok.extern.log4j.Log4j;
 public class METSHandlePlugin implements IStepPlugin, IPlugin {
 
     private String title = "intranda_step_handle_mets";
-    private static final String PLUGIN_NAME = "HandleMETS";
-    private static final String PEM_FILE = "home/joel/Handles/zertifikate/21.T11998_USER28-priv.pem";
+    private static final String PLUGIN_NAME = "intranda_step_handle_mets";
+    private static final String PEM_FILE = "/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem";
 
     //for testing:
     private static String rulesetExample = "/opt/digiverso/goobi/test/klassik.xml";
