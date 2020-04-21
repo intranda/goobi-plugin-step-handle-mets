@@ -8,5 +8,11 @@
 		<PEMFile>/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
 		<HandleInstitutionAbbr>go</HandleInstitutionAbbr>
 		<ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
+		
+		<!-- config elts for DOIs -->
+		<MakeDOI>true</MakeDOI>
+		<DOIMappingFile>/opt/digiverso/goobi/config/doi_mapping.xml</DOIMappingFile>
+		<DOIInstitutionAbbr>GOO</DOIInstitutionAbbr>
+		
 	</config>
 </config_plugin>

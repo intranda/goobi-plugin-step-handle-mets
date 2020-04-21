@@ -10,9 +10,14 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jdom2.JDOMException;
 
 import net.handle.hdllib.AbstractMessage;
 import net.handle.hdllib.AbstractResponse;
@@ -30,6 +35,7 @@ import net.handle.hdllib.ResolutionRequest;
 import net.handle.hdllib.ResolutionResponse;
 import net.handle.hdllib.SecretKeyAuthenticationInfo;
 import net.handle.hdllib.Util;
+import ugh.dl.DocStruct;
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -37,8 +43,7 @@ public class HandleClient {
 
     //----------------Static fields------------------
 
-    private String strPathPrivatePEM; // "/home/joel/Handles/zertifikate/21.T11998_USER28-priv.pem";
-    //    public static String strPathCertPEM = "/home/joel/Handles/zertifikate/21.T11998_USER28-cert.pem";
+    private String strPathPrivatePEM; 
 
     private static String strUserHandle = "21.T11998/USER28";
     private static String strHandleBase = "21.T11998";
@@ -47,50 +52,46 @@ public class HandleClient {
     private static int ADMIN_RECORD_INDEX = 100;
     private static int URL_RECORD_INDEX = 1;
 
+    private static int TITLE_INDEX = 2;
+    private static int AUTHORS_INDEX = 3;
+    private static int PUBLISHER_INDEX = 4;
+    private static int PUBDATE_INDEX = 5;
+    private static int INST_INDEX = 6;
+
     //----------------Non-Static fields--------------
 
     private PrivateKey privKey;
     private PublicKeyAuthenticationInfo authInfo;
 
-    //-----------------Testing:---------------------
-    public static void main(String[] args) throws HandleException, IOException {
+    private String strDOIMappingFile;
 
-        HandleClient test = new HandleClient(args[0]);
 
-        //        test.resolveRequest("300:200/23");
-        //        test.resolveRequest("45678/1");
-        //        test.resolveRequest("200/23");
-        //      test.resolveRequest(21.T11998/TEST015c2702c8-d2ca-40b7-9220-400225b19cc3);
-        //        test.resolveRequest("10.1594/GFZ.ISDC.CHAMP/CH-ME-2-PLP");
-
-        test.resolveRequest("20.1000/100");
-        test.resolveRequest("21.T11998/TEMPLATEHANDLE");
-        test.resolveRequest(strUserHandle);
-
-        String strUniqueHandle = test.newURLHandle("21.T11998/TEST02", "https://stackoverflow.com/", false);
-        //        test.changleHandleURL(strUniqueHandle, "https://www.theguardian.com/international");
-        test.resolveRequest(strUniqueHandle);
-
-        test.resolveRequest("21.T11998/TEST02");
-        test.changleHandleURL("21.T11998/TEST02", "https://www.theguardian.com/international");
-        test.resolveRequest("21.T11998/TEST02");
-
-        //        
-    }
 
     //---------------Ctor: get private key------------------
     public HandleClient(String strPathPrivatePEM) throws HandleException, IOException {
 
         this.strPathPrivatePEM = strPathPrivatePEM;
         this.privKey = getPemPrivateKey();
-        this.authInfo = new PublicKeyAuthenticationInfo(Util.encodeString(strUserHandle), 300, privKey);
+        this.authInfo = new PublicKeyAuthenticationInfo(Util.encodeString(strUserHandle), ADMIN_INDEX, privKey);
     }
 
     //Given an object with specified ID, make a handle "id_xyz" with URL given in getURLForHandle.
     //Returns the new Handle.
-    public String makeURLHandleForObject(String strObjectId, String strKundenKurz) throws HandleException {
+    public String makeURLHandleForObject(String strObjectId, String strKundenKurz, Boolean boMakeDOI, DocStruct docstruct)
+            throws HandleException {
 
-        String strNewHandle = newURLHandle(strHandleBase + "/goobi-" + strKundenKurz + "-" + strObjectId, strURLPrefix, true);
+        BasicDoi basicDOI = null;
+        if (boMakeDOI) {
+            try {
+                MakeDOI makeDOI = new MakeDOI(strDOIMappingFile);
+                basicDOI = makeDOI.getBasicDoi(docstruct);
+            } catch (Exception e) {
+                throw new HandleException(0, e.getMessage());
+            }
+
+        }
+
+        String strNewHandle = newURLHandle(strHandleBase + "/goobi-" + strKundenKurz + "-" + strObjectId, strURLPrefix, true, boMakeDOI, basicDOI);
         String strNewURL = getURLForHandle(strNewHandle);
 
         if (changleHandleURL(strNewHandle, strNewURL)) {
@@ -104,7 +105,8 @@ public class HandleClient {
     //Make a new handle with specified URL.
     //If boMintNewSuffix, add a suffix guar initConfig(myconfig);anteeing uniquness.
     //Retuns the new handle.
-    public String newURLHandle(String strNewHandle, String url, Boolean boMintNewSuffix) throws HandleException {
+    public String newURLHandle(String strNewHandle, String url, Boolean boMintNewSuffix, Boolean boMakeDOI, BasicDoi basicDOI)
+            throws HandleException {
 
         if (!boMintNewSuffix && isHandleRegistered(strNewHandle)) {
             resolveRequest(strNewHandle);
@@ -129,8 +131,6 @@ public class HandleClient {
 
             //test handle ok:
             strNewHandle = strTestHandle;
-
-            //request.mintNewSuffix = true;
         }
 
         // Define the admin record for the handle we want to create
@@ -144,6 +144,12 @@ public class HandleClient {
                 new HandleValue(URL_RECORD_INDEX, // unique index
                         "URL", // handle value type
                         url) }; //data
+
+        //add DOI info?
+        if (boMakeDOI) {
+            HandleValue valuesDOI[] = getHandleValuesFromDOI(basicDOI);
+            values = (HandleValue[]) ArrayUtils.addAll(values, valuesDOI);
+        }
 
         // Create the request to send and the resolver to send it
         CreateHandleRequest request = new CreateHandleRequest(Util.encodeString(strNewHandle), values, authInfo);
@@ -207,9 +213,9 @@ public class HandleClient {
     public Boolean changleHandleURL(String handle, String newUrl) throws HandleException {
 
         if (StringUtils.isEmpty(handle) || StringUtils.isEmpty(newUrl))
-            throw new IllegalArgumentException("DOI and URL cannot be empty");
+            throw new IllegalArgumentException("handle and URL cannot be empty");
 
-        log.info("update Handle: DOI: " + handle + " URL: " + newUrl);
+        log.info("update Handle: " + handle + " new URL: " + newUrl);
 
         try {
             int timestamp = (int) (System.currentTimeMillis() / 1000);
@@ -320,6 +326,99 @@ public class HandleClient {
         req.authoritative = false;
         req.ignoreRestrictedValues = true;
         return req;
+    }
+
+    public Boolean addDOI(DocStruct physical, String handle) throws JDOMException, IOException, HandleException {
+
+        if (StringUtils.isEmpty(handle))
+            throw new IllegalArgumentException("URL cannot be empty");
+
+        log.info("update Handle: " + handle + " Making DOI.");
+
+        try {
+            MakeDOI makeDOI = new MakeDOI(strDOIMappingFile);
+            BasicDoi basicDOI = makeDOI.getBasicDoi(physical);
+
+            // Make a create-handle request.
+            HandleValue values[] = getHandleValuesFromDOI(basicDOI);
+
+            ModifyValueRequest req = new ModifyValueRequest(Util.encodeString(handle), values, authInfo);
+
+            HandleResolver resolver = new HandleResolver();
+            AbstractResponse response = resolver.processRequest(req);
+
+            String msg = AbstractMessage.getResponseCodeMessage(response.responseCode);
+
+            log.info("response code from Handle request: " + msg);
+
+            if (response.responseCode != AbstractMessage.RC_SUCCESS) {
+                return false;
+            }
+
+        } catch (HandleException e) {
+            String message = "tried to update handle " + handle + " but failed: [" + e.getCode() + "] " + e.getMessage();
+            log.error(message);
+            throw e;
+        }
+
+        return true;
+    }
+
+    private HandleValue[] getHandleValuesFromDOI(BasicDoi basicDOI) throws HandleException {
+
+        ArrayList<HandleValue> values = new ArrayList<HandleValue>();
+
+        for (Pair<String, List<String>> pair : basicDOI.getValues()) {
+            int index = getIndex(pair.getLeft());
+
+            for (String strValue : pair.getRight()) {
+                values.add(new HandleValue(index, pair.getLeft(), strValue));
+            }
+        }
+
+        int timestamp = (int) (System.currentTimeMillis() / 1000);
+
+        for (HandleValue handleValue : values) {
+            handleValue.setTimestamp(timestamp);
+        }
+
+        return values.toArray(new HandleValue[0]);
+    }
+
+    /**
+     * Get the index in the handle for the specified field type.
+     * 
+     * @param strType
+     * @return
+     * @throws HandleException
+     */
+    private int getIndex(String strType) throws HandleException {
+
+        switch (strType) {
+            case "TITLE":
+                return TITLE_INDEX;
+
+            case "AUTHORS":
+                return AUTHORS_INDEX;
+
+            case "PUBLISHER":
+                return PUBLISHER_INDEX;
+
+            case "PUBDATE":
+                return PUBDATE_INDEX;
+
+            case "INST":
+                return INST_INDEX;
+
+            default:
+                throw new HandleException(0);
+        }
+    }
+
+    //Setter
+    public void setDOIMappingFile(String strMappingFile) {
+
+        this.strDOIMappingFile = strMappingFile;
     }
 
 }

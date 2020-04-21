@@ -1,30 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Mapping>
 
-<!-- Mandatory fields:  -->
- 
+	<!-- Mandatory fields: -->
+
 	<map>
 		<doiElt>creatorName</doiElt>
-		<localElt></localElt>
-		<default>"Stadtarchiv Duderstadt"</default>
+		<localElt>OwningInstitution</localElt>
+		<default>Stadtarchiv Duderstadt</default>
 	</map>
 
 
 	<map>
 		<doiElt>title</doiElt>
 		<localElt>titel</localElt>
-		<altLocalElt>EPN (digital)</altLocalElt>
-		<altLocalElt>EPN (digital)</altLocalElt>
+		<altLocalElt>TitleDocMain</altLocalElt>
 		<default>Fragment</default>
 	</map>
-	
-	
-
-<!-- Recommended fields:  -->
 
 
+	<map>
+		<doiElt>author</doiElt>
+		<localElt>autor</localElt>
+		<altLocalElt>Author</altLocalElt>
+		<default>Stadtarchiv Duderstadt</default>
+	</map>
 
-<!-- Optional fields:  -->
+	<map>
+		<doiElt>publisher</doiElt>
+		<localElt>quelle</localElt>
+		<altLocalElt>Publisher</altLocalElt>
+		<default>Stadtarchiv Duderstadt</default>
+	</map>
+
+	<map>
+		<doiElt>pubdate</doiElt>
+		<localElt>laufzeit0</localElt>
+		<altLocalElt>PublicationYearSort</altLocalElt>
+		<altLocalElt>PublicationYear</altLocalElt>
+		<default>unknown</default>
+	</map>
+
+	<map>
+		<doiElt>inst</doiElt>
+		<default>Stadtarchiv Duderstadt</default>
+	</map>
+
+	<!-- Recommended fields: -->
+
+
+
+	<!-- Optional fields: -->
 
 
 
