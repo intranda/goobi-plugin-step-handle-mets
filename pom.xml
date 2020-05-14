@@ -3,6 +3,8 @@
     <groupId>de.intranda.goobi.plugins.step</groupId>
     <artifactId>goobi-plugin-step-handle-mets</artifactId>
     <version>1.0.0</version>
+    
+    
     <properties>
         <jar.name>plugin_intranda_step_handle_mets</jar.name>
         <dest.folder>/opt/digiverso/goobi/plugins/step/</dest.folder>
