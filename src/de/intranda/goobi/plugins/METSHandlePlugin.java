@@ -156,8 +156,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     public String addHandle(DocStruct docstruct, String strId, Boolean boMakeDOI)
             throws HandleException, IOException, MetadataTypeNotAllowedException {
 
-        String strPEMFile = config.getString("PEMFile", PEM_FILE);
-        HandleClient handler = new HandleClient(strPEMFile);
+        HandleClient handler = new HandleClient(config);
 
         if (docstruct.getAllChildren() != null) {
             // run recursive through all children
@@ -174,7 +173,17 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
                     handler.setDOIMappingFile(config.getString("DOIMappingFile", null));
                 }
 
-                strHandle = handler.makeURLHandleForObject(strId, config.getString("HandleInstitutionAbbr", "go"), boMakeDOI, docstruct);
+              String strKundenKurz =   config.getString("HandleInstitutionAbbr");
+              String strPostfix = "";
+              
+              if (config.getString("IncludeGoobiPrefix").contentEquals("true")) {
+                  strPostfix =     "goobi-";
+              }
+              if (strKundenKurz != null && !strKundenKurz.isEmpty()) {
+                  strPostfix = strPostfix + strKundenKurz + "-";
+              }
+                  
+                strHandle = handler.makeURLHandleForObject(strId, strPostfix, boMakeDOI, docstruct);
                 setHandle(docstruct, strHandle);
             }
 

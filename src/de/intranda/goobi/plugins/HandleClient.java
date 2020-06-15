@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -43,11 +44,11 @@ public class HandleClient {
 
     //----------------Static fields------------------
 
-    private String strPathPrivatePEM; 
+    private String strPathPrivatePEM;
 
-    private static String strUserHandle = "21.T11998/USER28";
-    private static String strHandleBase = "21.T11998";
-    private static String strURLPrefix = "https://viewer.goobi.io/idresolver?handle=";
+    private String strUserHandle = "21.T11998/USER28";
+    private String strHandleBase = "21.T11998";
+    private String strURLPrefix = "https://viewer.goobi.io/idresolver?handle=";
     private static int ADMIN_INDEX = 300; //NOT 28!
     private static int ADMIN_RECORD_INDEX = 100;
     private static int URL_RECORD_INDEX = 1;
@@ -65,20 +66,20 @@ public class HandleClient {
 
     private String strDOIMappingFile;
 
-
-
     //---------------Ctor: get private key------------------
-    public HandleClient(String strPathPrivatePEM) throws HandleException, IOException {
+    public HandleClient(SubnodeConfiguration config) throws HandleException, IOException {
 
-        this.strPathPrivatePEM = strPathPrivatePEM;
+        this.strUserHandle = config.getString("UserHandle");
+        this.strHandleBase = config.getString("HandleBase");
+        this.strURLPrefix = config.getString("URLPrefix");
+        this.strPathPrivatePEM = config.getString("PEMFile");
         this.privKey = getPemPrivateKey();
         this.authInfo = new PublicKeyAuthenticationInfo(Util.encodeString(strUserHandle), ADMIN_INDEX, privKey);
     }
 
     //Given an object with specified ID, make a handle "id_xyz" with URL given in getURLForHandle.
     //Returns the new Handle.
-    public String makeURLHandleForObject(String strObjectId, String strKundenKurz, Boolean boMakeDOI, DocStruct docstruct)
-            throws HandleException {
+    public String makeURLHandleForObject(String strObjectId, String strPostfix, Boolean boMakeDOI, DocStruct docstruct) throws HandleException {
 
         BasicDoi basicDOI = null;
         if (boMakeDOI) {
@@ -91,7 +92,7 @@ public class HandleClient {
 
         }
 
-        String strNewHandle = newURLHandle(strHandleBase + "/goobi-" + strKundenKurz + "-" + strObjectId, strURLPrefix, true, boMakeDOI, basicDOI);
+        String strNewHandle = newURLHandle(strHandleBase + "/" + strPostfix + strObjectId, strURLPrefix, true, boMakeDOI, basicDOI);
         String strNewURL = getURLForHandle(strNewHandle);
 
         if (changleHandleURL(strNewHandle, strNewURL)) {

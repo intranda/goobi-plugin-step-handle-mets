@@ -67,8 +67,9 @@ public class TestHandles {
             String strLogicalHandle = plug.addHandle(logical, strId, true);
             
             //already carried out: "21.T11998/goobi-go-1296243265-1"; 
+            // http://hdl.handle.net/21.T11998/goobi-go-1296243265-1
             
-            //            plug.addHandle(physical, strId);
+            plug.addHandle(physical, strId);
 
             //            //Add DOI?
             //            if (plug.config.getBoolean("MakeDOI")) {

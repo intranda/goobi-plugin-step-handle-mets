@@ -35,9 +35,16 @@ Die Datei dient zur Konfiguration des Plugins und muss wie folgt aufgebaut sein:
 <config_plugin>
 	<config>
 		<StepName>Handle METS</StepName>
-		<PEMFile>/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
-		<HandleInstitutionAbbr>go</HandleInstitutionAbbr>
-		<ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
+		
+       <PEMFile>/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
+       <UserHandle>21.T11998/USER28</UserHandle> 
+       <HandleBase>21.T11998</HandleBase> 
+       <URLPrefix>https://viewer.goobi.io/idresolver?handle=</URLPrefix> 
+            
+       <HandleInstitutionAbbr>go</HandleInstitutionAbbr>
+       <IncludeGoobiPrefix>true</IncludeGoobiPrefix>
+       <ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
+    	<IncludeGoobiPrefix>true</IncludeGoobiPrefix>		
 	</config>
 </config_plugin>
 ```
@@ -51,9 +58,21 @@ wird der Pfad zur Private Key .PEM-Datei hinterlegt. Dieser wird vom GWDG bereit
 Das Element `"HandleInstitutionAbbr"`
 spezifiziert der Abkürzung, mit dem die Handles gespeichert werden sollen. Handles werden im Form
 
-`/goobi-KundenKurzel-objektId`
+`/goobi-HandleInstitutionAbbr-objektId`
 
-gespeichert.
+gespeichert, falls `"IncludeGoobiPrefix"` `true` ist, sonst im Form 
+
+`/HandleInstitutionAbbr-objektId`
+
+Sollte der `"HandleInstitutionAbbr"` leer sein, wird das Handle nur mit seiner objektId (und ggf. `goobi-` als Prefix) gespeichert.
+
+Details der Institution Handle Prefix sind unter die Elemente  `"HandleBase"` und `"UserHandle"` gespeichert. 
+
+Der URL, wo die Dokumente mit Ihrer Handle-Id dann zu finden sind, wird beschrieben in `"URLPrefix"`, wobei die Dokumente dann mit URL 
+
+`"URLPrefix + HandleId"` 
+        
+erwartet werden.
 
 
 ## Einstellungen in Goobi

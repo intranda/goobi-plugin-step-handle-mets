@@ -5,8 +5,14 @@
 		<project>*</project>
 		<step>*</step>
 		<StepName>intranda_step_handle_mets</StepName>
+				
 		<PEMFile>/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
+		<UserHandle>21.T11998/USER28</UserHandle> 
+        <HandleBase>21.T11998</HandleBase> 
+        <URLPrefix>https://viewer.goobi.io/idresolver?handle=</URLPrefix> 
+    		
 		<HandleInstitutionAbbr>go</HandleInstitutionAbbr>
+		<IncludeGoobiPrefix>true</IncludeGoobiPrefix>
 		<ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
 		
 		<!-- config elts for DOIs -->
