@@ -41,8 +41,8 @@ Die Datei dient zur Konfiguration des Plugins und muss wie folgt aufgebaut sein:
        <HandleBase>21.T11998</HandleBase> 
        <URLPrefix>https://viewer.goobi.io/idresolver?handle=</URLPrefix> 
             
+       <HandleIdPrefix>goobi</HandleIdPrefix>
        <HandleInstitutionAbbr>go</HandleInstitutionAbbr>
-       <IncludeGoobiPrefix>true</IncludeGoobiPrefix>
        <ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
     	<IncludeGoobiPrefix>true</IncludeGoobiPrefix>		
 	</config>
@@ -55,16 +55,16 @@ Im Element `"PEMFile"`
 wird der Pfad zur Private Key .PEM-Datei hinterlegt. Dieser wird vom GWDG bereitgestellt.
 
 
-Das Element `"HandleInstitutionAbbr"`
-spezifiziert der Abkürzung, mit dem die Handles gespeichert werden sollen. Handles werden im Form
+Die  Elemente `"HandleInstitutionAbbr"` und `"HandleIdPrefix"`
+spezifizieren der Abkürzung, mit dem die Handles gespeichert werden sollen. Handles werden im Form
 
-`/goobi-HandleInstitutionAbbr-objektId`
+`/HandleIdPrefix-HandleInstitutionAbbr-objektId`,
 
-gespeichert, falls `"IncludeGoobiPrefix"` `true` ist, sonst im Form 
+zum Bsp.
 
-`/HandleInstitutionAbbr-objektId`
+`/dlc-khi-objektId`,
 
-Sollte der `"HandleInstitutionAbbr"` leer sein, wird das Handle nur mit seiner objektId (und ggf. `goobi-` als Prefix) gespeichert.
+gespeichert. Sollte eins oder beide leer seinoder fehlen, dann wird der Handle ohne dieses Teil gespeichert. 
 
 Details der Institution Handle Prefix sind unter die Elemente  `"HandleBase"` und `"UserHandle"` gespeichert. 
 

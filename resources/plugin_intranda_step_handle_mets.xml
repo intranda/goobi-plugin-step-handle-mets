@@ -11,8 +11,8 @@
         <HandleBase>21.T11998</HandleBase> 
         <URLPrefix>https://viewer.goobi.io/idresolver?handle=</URLPrefix> 
     		
+		<HandleIdPrefix>goobi</HandleIdPrefix>
 		<HandleInstitutionAbbr>go</HandleInstitutionAbbr>
-		<IncludeGoobiPrefix>true</IncludeGoobiPrefix>
 		<ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
 		
 		<!-- config elts for DOIs -->

@@ -40,7 +40,6 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     private static final String PLUGIN_NAME = "intranda_step_handle_mets";
     private static final String PEM_FILE = "/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem";
 
-
     private Process process;
     private Step step;
     private String returnPath;
@@ -173,16 +172,17 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
                     handler.setDOIMappingFile(config.getString("DOIMappingFile", null));
                 }
 
-              String strKundenKurz =   config.getString("HandleInstitutionAbbr");
-              String strPostfix = "";
-              
-              if (config.getString("IncludeGoobiPrefix").contentEquals("true")) {
-                  strPostfix =     "goobi-";
-              }
-              if (strKundenKurz != null && !strKundenKurz.isEmpty()) {
-                  strPostfix = strPostfix + strKundenKurz + "-";
-              }
-                  
+                String strKundenKurz = config.getString("HandleInstitutionAbbr");
+                String strIdPrefix = config.getString("HandleIdPrefix");
+                String strPostfix = "";
+
+                if (strIdPrefix != null && !strIdPrefix.isEmpty()) {
+                    strPostfix = strIdPrefix + "-";
+                }
+                if (strKundenKurz != null && !strKundenKurz.isEmpty()) {
+                    strPostfix = strPostfix + strKundenKurz + "-";
+                }
+
                 strHandle = handler.makeURLHandleForObject(strId, strPostfix, boMakeDOI, docstruct);
                 setHandle(docstruct, strHandle);
             }
