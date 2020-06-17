@@ -4,7 +4,7 @@
 		<!-- which projects to use for (can be more then one, otherwise use *) -->
 		<project>*</project>
 		<step>*</step>
-		<StepName>intranda_step_handle_mets</StepName>
+		<StepName>*</StepName>
 				
 		<PEMFile>/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
 		<UserHandle>21.T11998/USER28</UserHandle> 
@@ -21,4 +21,28 @@
 		<DOIInstitutionAbbr>GOO</DOIInstitutionAbbr>
 		
 	</config>
+	
+	   <config>
+	       <!-- which projects to use for (can be more then one, otherwise use *) -->
+        <project>My special project</project>
+        <project>Archive_Project</project>
+        <step>CreateHandle</step>
+        <step>intranda_step_handle_mets</step>
+                
+        <PEMFile>/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
+        <UserHandle>21.T11998/USER28</UserHandle> 
+        <HandleBase>21.T11998</HandleBase> 
+        <URLPrefix>https://viewer.goobi.io/idresolver?handle=</URLPrefix> 
+            
+        <HandleIdPrefix>goobi</HandleIdPrefix>
+        <HandleInstitutionAbbr>go</HandleInstitutionAbbr>
+        <ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
+        
+        <!-- config elts for DOIs -->
+        <MakeDOI>true</MakeDOI>
+        <DOIMappingFile>/opt/digiverso/goobi/config/doi_mapping.xml</DOIMappingFile>
+        <DOIInstitutionAbbr>GOO</DOIInstitutionAbbr>
+        
+                
+    </config>
 </config_plugin>
