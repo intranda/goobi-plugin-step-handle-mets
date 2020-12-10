@@ -22,6 +22,9 @@ import org.jdom2.output.XMLOutputter;
 import ugh.dl.DocStruct;
 import ugh.dl.Metadata;
 
+/**
+ * TODO: Please document this class
+ */
 public class MakeDOI {
 
     /**
@@ -222,6 +225,9 @@ public class MakeDOI {
 
     }
 
+    /**
+     * TODO: Please document this method
+     */
     private void addElements(Element parent, String strEltName) {
 
         List<String> lstValues = getValues(strEltName, parent);
@@ -261,6 +267,9 @@ public class MakeDOI {
         rootNew.addContent(resourceType);
     }
 
+    /**
+     * TODO: Please document this method
+     */
     private void makeControl(Element rootEAD) {
 
         Element cont = new Element("control");
@@ -283,6 +292,9 @@ public class MakeDOI {
         rootEAD.addContent(cont);
     }
 
+    /**
+     * TODO: Please document this method
+     */
     private Element makeArchiveDesc(Element rootEAD) {
 
         Element arch = new Element("archdesc");
@@ -322,6 +334,9 @@ public class MakeDOI {
         return doi;
     }
 
+    /**
+     * TODO: Please document this method
+     */
     private List<String> getValues(String strDoiElt, DocStruct struct) {
 
         ArrayList<String> lstDefault = new ArrayList<String>();
@@ -364,6 +379,9 @@ public class MakeDOI {
         return lstDefault;
     }
 
+    /**
+     * TODO: Please document this method
+     */
     private List<String> getValuesForField(DocStruct struct, String strLocalElt) {
 
         ArrayList<String> lstValues = new ArrayList<String>();
@@ -380,6 +398,8 @@ public class MakeDOI {
     }
 
 }
+
+// can this be removed?
 
 //    /**
 //     * Goes through the tree looking for the relevant values for various elements. The element "titles" is mandatory, all others are optional.

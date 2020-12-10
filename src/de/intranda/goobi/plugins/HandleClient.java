@@ -39,6 +39,9 @@ import net.handle.hdllib.Util;
 import ugh.dl.DocStruct;
 import lombok.extern.log4j.Log4j;
 
+/**
+ * TODO: Please document this class
+ */
 @Log4j
 public class HandleClient {
 
@@ -67,6 +70,9 @@ public class HandleClient {
     private String strDOIMappingFile;
 
     //---------------Ctor: get private key------------------
+    /**
+     * TODO: Please document this method
+     */
     public HandleClient(SubnodeConfiguration config) throws HandleException, IOException {
 
         this.strUserHandle = config.getString("UserHandle");
@@ -79,6 +85,9 @@ public class HandleClient {
 
     //Given an object with specified ID, make a handle "id_xyz" with URL given in getURLForHandle.
     //Returns the new Handle.
+    /**
+     * TODO: Please document this method
+     */
     public String makeURLHandleForObject(String strObjectId, String strPostfix, Boolean boMakeDOI, DocStruct docstruct) throws HandleException {
 
         BasicDoi basicDOI = null;
@@ -106,6 +115,9 @@ public class HandleClient {
     //Make a new handle with specified URL.
     //If boMintNewSuffix, add a suffix guar initConfig(myconfig);anteeing uniquness.
     //Retuns the new handle.
+    /**
+     * TODO: Please document this method
+     */
     public String newURLHandle(String strNewHandle, String url, Boolean boMintNewSuffix, Boolean boMakeDOI, BasicDoi basicDOI)
             throws HandleException {
 
@@ -182,6 +194,9 @@ public class HandleClient {
         return strURLPrefix + strHandle;
     }
 
+    /**
+     * TODO: Please document this method
+     */
     public void resolveRequest(String strHandle) throws HandleException {
 
         // Get the UTF8 encoding of the desired handle.
@@ -211,6 +226,9 @@ public class HandleClient {
     }
 
     //Change the URL for the handle. Returns true if successful, falso otherwise
+    /**
+     * TODO: Please document this method
+     */
     public Boolean changleHandleURL(String handle, String newUrl) throws HandleException {
 
         if (StringUtils.isEmpty(handle) || StringUtils.isEmpty(newUrl))
@@ -262,6 +280,9 @@ public class HandleClient {
                 AdminRecord.PRM_LIST_HANDLES);
     }
 
+    /**
+     * TODO: Please document this method
+     */
     public PrivateKey getPemPrivateKey() throws HandleException, IOException {
 
         File f = new File(strPathPrivatePEM);
@@ -293,6 +314,9 @@ public class HandleClient {
 
     //registered?
 
+    /**
+     * TODO: Please document this method
+     */
     public boolean isHandleRegistered(String handle) throws HandleException {
 
         boolean handleRegistered = false;
@@ -329,6 +353,9 @@ public class HandleClient {
         return req;
     }
 
+    /**
+     * TODO: Please document this method
+     */
     public Boolean addDOI(DocStruct physical, String handle) throws JDOMException, IOException, HandleException {
 
         if (StringUtils.isEmpty(handle))

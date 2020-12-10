@@ -8,6 +8,8 @@ import org.apache.commons.lang3.tuple.Pair;
 /**
  * Most basic necessary info for a DOI
  * 
+ * TODO: Please add some more documentation here
+ * 
  * @author joel
  *
  */
@@ -25,6 +27,9 @@ public class BasicDoi {
 
     public List<String> INST;
 
+    /**
+     * TODO: Please document this method
+     */
     public BasicDoi() {
 
         lstFields = new ArrayList<String>();
@@ -35,6 +40,9 @@ public class BasicDoi {
         lstFields.add("INST");
     }
 
+    /**
+     * TODO: Please document this method
+     */
     public List<Pair<String, List<String>>> getValues() {
 
         List<Pair<String, List<String>>> lstValues = new ArrayList<Pair<String,List<String>>>();

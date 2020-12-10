@@ -1,26 +1,26 @@
 package de.intranda.goobi.plugins;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-import net.handle.hdllib.HandleException;
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-
-import org.goobi.beans.Step;
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.goobi.beans.Process;
+import org.goobi.beans.Step;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginType;
 import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IPlugin;
 import org.goobi.production.plugin.interfaces.IStepPlugin;
-import org.jdom2.JDOMException;
 
+//import uk.gov.nationalarchives.droid.core.signature.FileFormat;
+import de.sub.goobi.config.ConfigPlugins;
+import lombok.extern.log4j.Log4j;
+import net.handle.hdllib.HandleException;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
 import ugh.dl.DigitalDocument;
 import ugh.dl.DocStruct;
 import ugh.dl.Fileformat;
@@ -28,10 +28,10 @@ import ugh.dl.Metadata;
 import ugh.dl.MetadataType;
 import ugh.dl.Prefs;
 import ugh.exceptions.MetadataTypeNotAllowedException;
-import ugh.fileformats.mets.MetsMods;
-//import uk.gov.nationalarchives.droid.core.signature.FileFormat;
-import de.sub.goobi.config.ConfigPlugins;
-import lombok.extern.log4j.Log4j;
+
+/**
+ * TODO: Please document this class
+ */
 
 @PluginImplementation
 @Log4j
@@ -132,6 +132,9 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         return false;
     }
 
+    /**
+     * TODO: Please document this method
+     */
     private String getId(DocStruct logical) {
 
         List<Metadata> lstMetadata = logical.getAllMetadata();
@@ -148,10 +151,13 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         return null;
     }
 
-    // check if Metadata handle exists
-    // if not, create handle and save it under "_urn" in the docstruct.
-    //
-    // Returns the handle.
+    
+    /**
+     * check if Metadata handle exists
+     * if not, create handle and save it under "_urn" in the docstruct.
+     * 
+     * @return Returns the handle.
+     */
     public String addHandle(DocStruct docstruct, String strId, Boolean boMakeDOI)
             throws HandleException, IOException, MetadataTypeNotAllowedException {
 
@@ -193,7 +199,9 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         return null;
     }
 
-    //If the element already has a handle, return it, otherwise return null.
+    /**
+     *  If the element already has a handle, return it, otherwise return null.
+     */
     private String getHandle(DocStruct docstruct) {
 
         List<? extends Metadata> lstURN = docstruct.getAllMetadataByType(urn);
@@ -206,9 +214,10 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         return null;
     }
 
-    //Add metadata to the element containing the handle.
+    /**
+     * Add metadata to the element containing the handle.
+     */
     private void setHandle(DocStruct docstruct, String strHandle) throws MetadataTypeNotAllowedException {
-
         Metadata md = new Metadata(urn);
         md.setValue(strHandle);
         docstruct.addMetadata(md);
