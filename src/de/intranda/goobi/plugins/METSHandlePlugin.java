@@ -1,5 +1,6 @@
 package de.intranda.goobi.plugins;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -28,9 +29,10 @@ import ugh.dl.Metadata;
 import ugh.dl.MetadataType;
 import ugh.dl.Prefs;
 import ugh.exceptions.MetadataTypeNotAllowedException;
+import ugh.fileformats.mets.MetsMods;
 
 /**
- * TODO: Please document this class
+ * Plugin for registering Handles for documents
  */
 
 @PluginImplementation
@@ -62,6 +64,70 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         return PLUGIN_NAME;
     }
 
+    //Testing:
+    public static void main(String[] args) throws Exception {
+
+        METSHandlePlugin plug = new METSHandlePlugin();
+       String rulesetExample = "/opt/digiverso/goobi/test/klassik.xml";
+        String xmlExample = "/opt/digiverso/goobi/test/meta.xml";
+        String xmlOut = "/opt/digiverso/goobi/test/doiTEST.xml";      
+        String strConfig = "/opt/digiverso/goobi/config/plugin_intranda_step_handle_mets.xml";
+                
+        try {
+
+            XMLConfiguration xmlConfig = new XMLConfiguration(new File(strConfig));
+            xmlConfig.setExpressionEngine(new XPathExpressionEngine());
+            xmlConfig.setReloadingStrategy(new FileChangedReloadingStrategy());
+
+            SubnodeConfiguration myconfig = null;
+            myconfig = xmlConfig.configurationAt("//config[./project = '*'][./step = '*']");
+
+            plug.config = myconfig;
+
+            plug.prefs = new Prefs();
+            plug.prefs.loadPrefs(rulesetExample);
+            plug.urn = plug.prefs.getMetadataTypeByName("_urn");
+
+            //read the metatdata
+            Fileformat fileformat = new MetsMods(plug.prefs);
+            fileformat.read(xmlExample);
+
+            DigitalDocument digitalDocument = fileformat.getDigitalDocument();
+            DocStruct logical = digitalDocument.getLogicalDocStruct();
+            DocStruct physical = digitalDocument.getPhysicalDocStruct();
+
+            String strId = plug.getId(logical);
+
+            //add handles to each physical and logical element
+            String strLogicalHandle = plug.addHandle(logical, strId, true);
+            
+            //already carried out: "21.T11998/goobi-go-1296243265-1"; 
+            // http://hdl.handle.net/21.T11998/goobi-go-1296243265-1
+            
+            plug.addHandle(physical, strId, false);
+
+            //            //Add DOI?
+            //            if (plug.config.getBoolean("MakeDOI")) {
+            //
+            //                plug.addDOI(logical, strLogicalHandle);
+            //            }
+
+            fileformat.write(xmlOut);
+
+        } catch (Exception e) {
+
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    
+    
+    
+    
+    
+    /**
+     * Sets up the config file 
+     */
     @Override
     public void initialize(Step step1, String returnPath) {
 
@@ -103,6 +169,13 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         this.urn = prefs.getMetadataTypeByName("_urn");
     }
 
+    /**
+     * Carry out the plugin:
+     * - get the current digital document 
+     * - for each physical and logical element of the document, create and register a handle
+     * - write the handles into the MetsMods file for the document
+     * 
+     */
     @Override
     public boolean execute() {
 
@@ -133,7 +206,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     }
 
     /**
-     * TODO: Please document this method
+     * Returns the CatalogIDDigital for the struct
      */
     private String getId(DocStruct logical) {
 
@@ -178,6 +251,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
                     handler.setDOIMappingFile(config.getString("DOIMappingFile", null));
                 }
 
+                //Handle looks like 
                 String strKundenKurz = config.getString("HandleInstitutionAbbr");
                 String strIdPrefix = config.getString("HandleIdPrefix");
                 String strPostfix = "";
@@ -200,7 +274,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     }
 
     /**
-     *  If the element already has a handle, return it, otherwise return null.
+     *  If the element already has a handle, saved in the "_urn" metadatum, return it, otherwise return null.
      */
     private String getHandle(DocStruct docstruct) {
 

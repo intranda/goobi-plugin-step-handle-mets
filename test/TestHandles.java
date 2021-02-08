@@ -1,5 +1,7 @@
 package de.intranda.goobi.plugins;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -7,6 +9,7 @@ import org.apache.commons.configuration.SubnodeConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.reloading.FileChangedReloadingStrategy;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
+import org.junit.Test;
 
 import net.handle.hdllib.HandleException;
 import ugh.dl.DigitalDocument;
@@ -31,7 +34,10 @@ public class TestHandles {
         // TODO Auto-generated constructor stub
     }
 
-    
+    @Test
+    public void testVersion() throws IOException {
+        main(null);
+    }
 
     //Testing:
     public static void main(String[] args) throws Exception {

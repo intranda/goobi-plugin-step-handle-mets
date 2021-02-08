@@ -28,7 +28,7 @@ import ugh.dl.Metadata;
 public class MakeDOI {
 
     /**
-     * Static entry point
+     * Static entry point for testing
      * 
      * @param args
      * @throws IOException
@@ -87,8 +87,6 @@ public class MakeDOI {
         if (eltMap == null) {
             return null;
         }
-
-        ArrayList<String> lstValues = new ArrayList<String>();
 
         //set up the default value:
         String strDefault = eltMap.getChildText("default");

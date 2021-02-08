@@ -6,9 +6,8 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
- * Most basic necessary info for a DOI
- * 
- * TODO: Please add some more documentation here
+ * Most basic necessary info for a DOI - 
+ * it must contain at least this information.
  * 
  * @author joel
  *
