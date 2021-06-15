@@ -2,6 +2,8 @@ package de.intranda.goobi.plugins;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
@@ -68,11 +70,12 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     public static void main(String[] args) throws Exception {
 
         METSHandlePlugin plug = new METSHandlePlugin();
-       String rulesetExample = "/opt/digiverso/goobi/test/klassik.xml";
+        String rulesetExample = "/opt/digiverso/goobi/test/klassik.xml";
         String xmlExample = "/opt/digiverso/goobi/test/meta.xml";
-        String xmlOut = "/opt/digiverso/goobi/test/doiTEST.xml";      
+        String xmlOut = "/opt/digiverso/goobi/test/doiTEST.xml";
         String strConfig = "/opt/digiverso/goobi/config/plugin_intranda_step_handle_mets.xml";
-                
+        String strHandlesToRemove = "/home/joel/git/rechtsgeschichte/for_mpi/handles/removeHandles.txt";
+
         try {
 
             XMLConfiguration xmlConfig = new XMLConfiguration(new File(strConfig));
@@ -88,23 +91,30 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
             plug.prefs.loadPrefs(rulesetExample);
             plug.urn = plug.prefs.getMetadataTypeByName("_urn");
 
-            //read the metatdata
-            Fileformat fileformat = new MetsMods(plug.prefs);
-            fileformat.read(xmlExample);
+            //remove specified handles:
+            if (args.length == 1) {
 
-            DigitalDocument digitalDocument = fileformat.getDigitalDocument();
-            DocStruct logical = digitalDocument.getLogicalDocStruct();
-            DocStruct physical = digitalDocument.getPhysicalDocStruct();
+                strHandlesToRemove = args[0];
+                plug.removeHandles(strHandlesToRemove);
+            }
 
-            String strId = plug.getId(logical);
+            //            //read the metatdata
+            //            Fileformat fileformat = new MetsMods(plug.prefs);
+            //            fileformat.read(xmlExample);
+            //
+            //            DigitalDocument digitalDocument = fileformat.getDigitalDocument();
+            //            DocStruct logical = digitalDocument.getLogicalDocStruct();
+            //            DocStruct physical = digitalDocument.getPhysicalDocStruct();
+
+            //            String strId = plug.getId(logical);
 
             //add handles to each physical and logical element
-            String strLogicalHandle = plug.addHandle(logical, strId, true);
-            
+            //            String strLogicalHandle = plug.addHandle(logical, strId, true);
+
             //already carried out: "21.T11998/goobi-go-1296243265-1"; 
             // http://hdl.handle.net/21.T11998/goobi-go-1296243265-1
-            
-            plug.addHandle(physical, strId, false);
+
+            //            plug.addHandle(physical, strId, false);
 
             //            //Add DOI?
             //            if (plug.config.getBoolean("MakeDOI")) {
@@ -112,7 +122,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
             //                plug.addDOI(logical, strLogicalHandle);
             //            }
 
-            fileformat.write(xmlOut);
+            //            fileformat.write(xmlOut);
 
         } catch (Exception e) {
 
@@ -120,13 +130,8 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         }
     }
 
-    
-    
-    
-    
-    
     /**
-     * Sets up the config file 
+     * Sets up the config file
      */
     @Override
     public void initialize(Step step1, String returnPath) {
@@ -170,9 +175,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     }
 
     /**
-     * Carry out the plugin:
-     * - get the current digital document 
-     * - for each physical and logical element of the document, create and register a handle
+     * Carry out the plugin: - get the current digital document - for each physical and logical element of the document, create and register a handle
      * - write the handles into the MetsMods file for the document
      * 
      */
@@ -224,10 +227,8 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         return null;
     }
 
-    
     /**
-     * check if Metadata handle exists
-     * if not, create handle and save it under "_urn" in the docstruct.
+     * check if Metadata handle exists if not, create handle and save it under "_urn" in the docstruct.
      * 
      * @return Returns the handle.
      */
@@ -274,7 +275,7 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
     }
 
     /**
-     *  If the element already has a handle, saved in the "_urn" metadatum, return it, otherwise return null.
+     * If the element already has a handle, saved in the "_urn" metadatum, return it, otherwise return null.
      */
     private String getHandle(DocStruct docstruct) {
 
@@ -295,6 +296,20 @@ public class METSHandlePlugin implements IStepPlugin, IPlugin {
         Metadata md = new Metadata(urn);
         md.setValue(strHandle);
         docstruct.addMetadata(md);
+    }
+
+    private void removeHandles(String strHandlesToRemove) throws HandleException, IOException {
+
+        HandleClient handler = new HandleClient(config);
+        List<String> lstHandlesToRemove = Files.readAllLines(Paths.get(strHandlesToRemove));
+
+        for (String strHandle : lstHandlesToRemove) {
+            if (strHandle != null) {
+
+                handler.remove(strHandle);
+            }
+
+        }
     }
 
     @Override

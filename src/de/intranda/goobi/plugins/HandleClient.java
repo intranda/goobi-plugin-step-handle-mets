@@ -26,6 +26,7 @@ import net.handle.hdllib.AdminRecord;
 import net.handle.hdllib.AuthenticationInfo;
 import net.handle.hdllib.CreateHandleRequest;
 import net.handle.hdllib.CreateHandleResponse;
+import net.handle.hdllib.DeleteHandleRequest;
 import net.handle.hdllib.Encoder;
 import net.handle.hdllib.HandleException;
 import net.handle.hdllib.HandleResolver;
@@ -447,6 +448,32 @@ public class HandleClient {
     public void setDOIMappingFile(String strMappingFile) {
 
         this.strDOIMappingFile = strMappingFile;
+    }
+
+    public void remove(String strHandle) throws HandleException {
+     // Create the request to send and the resolver to send it
+        DeleteHandleRequest request = new DeleteHandleRequest(Util.encodeString(strHandle), authInfo);
+
+        HandleResolver resolver = new HandleResolver();
+        AbstractResponse response;
+
+        // Let the resolver process the request
+        response = resolver.processRequest(request);
+
+        // Check the response to see if operation was successful
+        if (response.responseCode == AbstractMessage.RC_SUCCESS) {
+
+            log.info("Handle deleted: " + strHandle);
+            System.out.println("Handle deleted: " + strHandle);
+
+        } else if (response.responseCode == AbstractMessage.RC_HANDLE_NOT_FOUND) {
+
+            log.info("Handle not found: " + strHandle);
+            System.out.println("Handle not found: " + strHandle);
+            
+        } else {
+            throw new HandleException(HandleException.INTERNAL_ERROR, "Failed trying to delete a new handle at the server, response was" + response);
+        }
     }
 
 }
