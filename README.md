@@ -49,8 +49,6 @@ Die Datei dient zur Konfiguration des Plugins und muss wie folgt aufgebaut sein:
 </config_plugin>
 ```
 
-Eine Kopie liegt in dieser Repro, im Ordner "resources".
-
 Im Element `"PEMFile"`
 wird der Pfad zur Private Key .PEM-Datei hinterlegt. Dieser wird vom GWDG bereitgestellt.
 
