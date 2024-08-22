@@ -8,6 +8,7 @@ published: false
 ## Introduction 
 The plugin generates a Handle on the Handle server for all logical and physical elements of a METS file. This Handle is then stored within the element itself as metadata under `"_urn"`.
 
+If automatic DOI assignment is installed, a new DOI will be generated and stored for each top-level logical element.
 
 ## Installation
 To use the plugin, the following files need to be installed:
@@ -33,6 +34,16 @@ Once the plugin is installed and configured, it can be used within a Goobi workf
 
 To do this, the `plugin plugin_intranda_step_handle_mets` must be specified within the desired task. Additionally, the checkboxes for Metadata and Automatic task must be set.
 
+To use the automatic DOI assignment, an additional file must be installed in the following path, so that it is readable by the Tomcat user:
+
+```bash
+/opt/digiverso/goobi/config/
+```
+
+This file serves to configure the plugin and is located in the "mappings" folder:
+
+{{CONFIG_DESCRIPTION_PROJECT_STEP}}
+
 ## Overview and functionality
 The operation of the plugin within the correctly configured workflow is as follows:
 
@@ -57,3 +68,36 @@ Parameter               | Explanation
 `UserHandle`              | Stores details of the Institution Handle Prefix.
 `URLPrefix`               | URL where the documents with their Handle-ID can be found.sind. |
 
+The file `plugin_intranda_step_handle_mets.xml` must include the following additional fields for DOI assignment:
+
+```xml
+<config_plugin>
+	<config>
+
+    ...
+    
+    <MakeDOI>true</MakeDOI>
+	<DOIMappingFile>"path/to/DOI-Mapping.xml/file"</DOIMappingFile>
+	
+	</config>
+</config_plugin>
+```
+
+## Mapping File
+In the DOI-Mapping.xml file, each <map> entry describes a mapping between a Dublin Core element and one or more metadata fields from the METS file. The mappings are set up as follows:
+
+<map>
+  <doiElt>pubdate</doiElt>
+  <localElt>PublicationYear</localElt>
+  <altLocalElt>PublicationYearSort</altLocalElt>
+  <altLocalElt>laufzeit0</altLocalElt>
+  <default>unknown</default>
+</map>
+
+| Parameter               | Description                                                                                                      |
+|-------------------------|------------------------------------------------------------------------------------------------------------------|
+| `<doiElt>`              | The Dublin Core element for which this mapping is defined.                                                        |
+| `<localElt>`            | The name of the metadata in the METS file whose value should be used for the `<doiElt>`.                          |
+| `<altLocalElt>`         | Alternative names for the metadata, which will be searched if no entry with the name `<localElt>` is found.       |
+| `<default>`             | Specifies the value to be used if neither `<localElt>` nor `<altLocalElt>` provide suitable entries.              |
+| `<title>`, `<author>`, `<publisher>`, `<pubdate>`, `<inst>` | These are the five mandatory and maximum allowed fields.                                                   |
