@@ -2,7 +2,7 @@
 title: Automatic Handle registration
 identifier: intranda_step_handle_mets
 description: Step Plugin for the automatic registration for Handle IDs in METS files
-published: false
+published: true
 ---
 
 ## Introduction 
