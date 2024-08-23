@@ -1,8 +1,8 @@
 ---
-title: METS verarbeiten
+title: Automatische Handlevergabe
 identifier: intranda_step_handle_mets
-description: Step Plugin für die automatische Erstellung von Handle-IDs in METS-Dateien
-published: false
+description: Step Plugin für die automatische Erstellung von Handle-IDs innerhalb von METS-Dateien
+published: true
 ---
 
 ## Einführung
