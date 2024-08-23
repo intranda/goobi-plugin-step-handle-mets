@@ -1,12 +1,12 @@
 ---
-title: Handle METS 
+title: Automatic Handle registration
 identifier: intranda_step_handle_mets
-description: Step Plugin for the automatic creation of Handle IDs in METS files
+description: Step Plugin for the automatic registration for Handle IDs in METS files
 published: false
 ---
 
 ## Introduction 
-The plugin generates a Handle on the Handle server for all logical and physical elements of a METS file. This Handle is then stored within the element itself as metadata under `"_urn"`.
+The plugin generates a Handle on the Handle server for all logical and physical elements of a METS file. This Handle is then stored within the element itself as metadata under `_urn`.
 
 If automatic DOI assignment is installed, a new DOI will be generated and stored for each top-level logical element.
 
