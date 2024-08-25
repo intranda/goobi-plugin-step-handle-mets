@@ -1,89 +1,39 @@
-AddValueRequestAddValueRequest# Automatic Handles
+# Goobi workflow Plugin: goobi-plugin-step-handle-mets
 
-Documentation zur Plugin zum automatische Handlevergabe.
+<img src="https://goobi.io/wp-content/uploads/logo_goobi_plugin.png" align="right" style="margin:0 0 20px 20px;" alt="Plugin for Goobi workflow" width="175" height="109">
 
-## Beschreibung
+This legacy Step plugin for Goobi workflow was developed for the Max-Planck-Society to allow the migration of DLC to Goobi. It is used to manage the migration of Handle identifiers inside of METS files.
 
-Das Plugin erzeugt beim Handle-Server ein Handle für jeder logische und physische Element eines METS-Dateis. Dieser Handle wird dann in dem Element selber gespeichert, als Metadatum `"_urn"`.
+This is a plugin for Goobi workflow, the open source workflow tracking software for digitisation projects. More information about Goobi workflow is available under https://goobi.io. If you want to get in touch with the user community simply go to https://community.goobi.io.
 
+## Plugin details
 
-## Installation und Konfiguration
+More information about the functionality of this plugin and the complete documentation can be found in the central documentation area at https://docs.goobi.io
 
-Das Plugin besteht aus zwei Dateien:
+Detail                      | Description
+--------------------------- | ----------------------
+**Plugin identifier**       | intranda_step_handle_mets
+**Plugin type**             | step
+**Licence**                 | GPL 2.0 or newer
+**Documentation (German)**  | https://docs.goobi.io/workflow-plugins/v/eng/step/goobi-plugin-step-handle-mets
+**Documentation (English)** | https://docs.goobi.io/workflow-plugins/v/ger/step/goobi-plugin-step-handle-mets
 
-```bash
-goobi-plugin-step-handle-mets.jar
-plugin_intranda_step_handle_mets.xml
-```
+## Goobi details
 
-Die Datei `"goobi-plugin-step-handle-mets.jar"` enthält die Programmlogik und muss für den tomcat-Nutzer lesbar in folgendes Verzeichnis installiert werden:
+Goobi workflow is an open source web application to manage small and large digitisation projects mostly in cultural heritage institutions all around the world. More information about Goobi can be found here:
 
-```bash
-/opt/digiverso/goobi/plugins/step/
-```
+Detail                      | Description
+--------------------------- | ---------------------------
+**Goobi web site**          | https://www.goobi.io
+**Goobi community**         | https://community.goobi.io
+**Goobi documentation**     | https://docs.goobi.io
 
-Die Datei ```plugin_intranda_step_handle_mets.xml``` muss ebenfalls für den tomcat-Nutzer lesbar sein und in folgendes Verzeichnis installiert werden:
+## Development
 
-```bash
-/opt/digiverso/goobi/config/
-```
+This plugin was developed by intranda. If you have any issues, feedback, question or if you are looking for more information about Goobi workflow, Goobi viewer and all our other developments that are used in digitisation projects please get in touch with us.  
 
-Die Datei dient zur Konfiguration des Plugins und muss wie folgt aufgebaut sein:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<config_plugin>
-	<config>
-		<StepName>Handle METS</StepName>
-		
-       <PEMFile>/opt/digiverso/goobi/config/zertifikate/21.T11998_USER28-priv.pem</PEMFile>
-       <UserHandle>21.T11998/USER28</UserHandle> 
-       <HandleBase>21.T11998</HandleBase> 
-       <URLPrefix>https://viewer.goobi.io/idresolver?handle=</URLPrefix> 
-            
-       <HandleIdPrefix>goobi</HandleIdPrefix>
-       <HandleInstitutionAbbr>go</HandleInstitutionAbbr>
-       <ErrorMessage>Handle Authorization file could not be found.</ErrorMessage>
-    	<IncludeGoobiPrefix>true</IncludeGoobiPrefix>		
-	</config>
-</config_plugin>
-```
-
-Im Element `"PEMFile"`
-wird der Pfad zur Private Key .PEM-Datei hinterlegt. Dieser wird vom GWDG bereitgestellt.
-
-
-Die  Elemente `"HandleInstitutionAbbr"` und `"HandleIdPrefix"`
-spezifizieren der Abkürzung, mit dem die Handles gespeichert werden sollen. Handles werden im Form
-
-`/HandleIdPrefix-HandleInstitutionAbbr-objektId`,
-
-zum Bsp.
-
-`/dlc-khi-objektId`,
-
-gespeichert. Sollte eins oder beide leer seinoder fehlen, dann wird der Handle ohne dieses Teil gespeichert. 
-
-Details der Institution Handle Prefix sind unter die Elemente  `"HandleBase"` und `"UserHandle"` gespeichert. 
-
-Der URL, wo die Dokumente mit Ihrer Handle-Id dann zu finden sind, wird beschrieben in `"URLPrefix"`, wobei die Dokumente dann mit URL 
-
-`"URLPrefix + HandleId"` 
-        
-erwartet werden.
-
-
-## Einstellungen in Goobi
-
-Nachdem das Plugin installiert und konfiguriert wurde, kann es innerhalb eines Arbeitsschrittes von Goobi genutzt werden.
-
-Dazu muss innerhalb der gewünschten Aufgabe das Plugin `"plugin_intranda_step_handle_mets"` eingetragen werden. Des Weiteren muss die Checkboxes Metadaten und Automatische Aufgabe gesetzt sein.
-
-## Arbeitsweise
-
-Die Arbeitsweise des Plugins innerhalb des korrekt konfigurierten Workflows sieht folgendermaßen aus:
-
-* Wenn das Plugin innerhalb des Workflows aufgerufen wurde, öffnet es die METS-Datei.
-* Für jede logische und physische Element des METS-Dateis, wird ein Handle erzeugt (vom Form `"/goobi-KundenKurzel-objektId"`, wo der
-objektId die des Elements ist, mit Suffix `-1`, `-2`, etc. sollte der Handle schon existieren).
-* Dieser Handle wird dann in der jeweilige Element geschrieben, unter der Metadata vom Type `"_urn"`.
+Contact                     | Details
+--------------------------- | ----------------------------------------------------
+**Company name**            | intranda GmbH
+**Address**                 | Bertha-von-Suttner-Str. 9, 37085 Göttingen, Germany
+**Web site**                | https://www.intranda.com
